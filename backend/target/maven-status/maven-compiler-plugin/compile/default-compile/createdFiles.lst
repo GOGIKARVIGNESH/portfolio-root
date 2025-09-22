@@ -1,0 +1,10 @@
+com\example\portfolio\entity\Blog.class
+com\example\portfolio\entity\Project.class
+com\example\portfolio\repository\ContactRepository.class
+com\example\portfolio\repository\BlogRepository.class
+com\example\portfolio\config\CorsConfig.class
+com\example\portfolio\entity\Contact.class
+com\example\portfolio\repository\ProjectRepository.class
+com\example\portfolio\config\DataInitializer.class
+com\example\portfolio\controller\ContactController.class
+com\example\portfolio\PortfolioApplication.class

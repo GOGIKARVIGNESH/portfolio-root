@@ -1,0 +1,10 @@
+D:\CICD\portfolio-root\backend\src\main\java\com\example\portfolio\repository\ProjectRepository.java
+D:\CICD\portfolio-root\backend\src\main\java\com\example\portfolio\entity\Project.java
+D:\CICD\portfolio-root\backend\src\main\java\com\example\portfolio\config\CorsConfig.java
+D:\CICD\portfolio-root\backend\src\main\java\com\example\portfolio\PortfolioApplication.java
+D:\CICD\portfolio-root\backend\src\main\java\com\example\portfolio\entity\Contact.java
+D:\CICD\portfolio-root\backend\src\main\java\com\example\portfolio\repository\ContactRepository.java
+D:\CICD\portfolio-root\backend\src\main\java\com\example\portfolio\config\DataInitializer.java
+D:\CICD\portfolio-root\backend\src\main\java\com\example\portfolio\entity\Blog.java
+D:\CICD\portfolio-root\backend\src\main\java\com\example\portfolio\repository\BlogRepository.java
+D:\CICD\portfolio-root\backend\src\main\java\com\example\portfolio\controller\ContactController.java
