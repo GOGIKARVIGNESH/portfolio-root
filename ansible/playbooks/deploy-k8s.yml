@@ -1,0 +1,34 @@
+---
+- name: Deploy Full-Stack Application to Kubernetes
+  hosts: webservers
+  become: yes # Use sudo on the remote machine
+  vars:
+    k8s_manifests_dir: /tmp/k8s-manifests # Temporary directory on the target server
+  
+  tasks:
+    - name: Ensure manifest directory exists
+      ansible.builtin.file:
+        path: "{{ k8s_manifests_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy Kubernetes manifests (YAML files)
+      ansible.builtin.copy:
+        # Source location of your manifest files
+        src: 'k8s-manifests/{{ item }}'
+        # Destination location on the remote server
+        dest: "{{ k8s_manifests_dir }}/{{ item }}" 
+      loop:
+        - postgres-deployment.yaml
+        - backend-deployment.yaml
+        - frontend-deployment.yaml
+      
+    - name: Apply Kubernetes deployments
+      ansible.builtin.command:
+        # Command to apply all YAML files in the destination directory
+        cmd: "kubectl apply -f {{ k8s_manifests_dir }}/"
+      register: k8s_status
+
+    - name: Display deployment status
+      ansible.builtin.debug:
+        var: k8s_status.stdout

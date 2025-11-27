@@ -62,20 +62,29 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/portfolio-frontend:latest
-          # FIX: This forces a clean build, ensuring the 'chmod' fix in the Dockerfile is applied
+          # FIX: Forces clean build to apply permissions fix in Dockerfile
           no-cache: true 
 
   deploy:
     runs-on: ubuntu-latest
     needs: docker
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.0
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python for Ansible
+        uses: actions/setup-python@v5
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd /path/to/your/project
-            docker-compose pull
-            docker-compose up -d
+          python-version: '3.x'
+          
+      - name: Install Ansible
+        run: pip install ansible
+
+      - name: Set up SSH for Target Server
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          # This adds your SSH key to the runner, allowing Ansible to connect to the target server
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+          
+      - name: Run Ansible Playbook to Deploy K8s
+        run: ansible-playbook -i ansible/inventories/inventory.ini ansible/playbooks/deploy-k8s.yml

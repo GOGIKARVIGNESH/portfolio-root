@@ -1,0 +1,34 @@
+# 1. Deployment (The Frontend NGINX Containers)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: ${{ secrets.DOCKERHUB_USERNAME }}/portfolio-frontend:latest
+        ports:
+        - containerPort: 80
+---
+# 2. Service (External Access)
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-nodeport-service
+spec:
+  type: NodePort # Use LoadBalancer for production on cloud providers
+  selector:
+    app: frontend
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30000 # Accessible outside the cluster at HostIP:30000
