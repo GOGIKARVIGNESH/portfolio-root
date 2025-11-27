@@ -13,7 +13,7 @@ services:
     build:
       context: ./backend
     ports:
-      - "8081:8081"
+      - "8081:8085"     # host 8081 -> container 8085 (app currently listens on 8085)
     depends_on:
       - db
     environment:
@@ -21,6 +21,7 @@ services:
       - DATABASE_USER=user
       - DATABASE_PASSWORD=password
       - DATABASE_NAME=mydb
+    restart: unless-stopped
 
   # Database Service
   db:

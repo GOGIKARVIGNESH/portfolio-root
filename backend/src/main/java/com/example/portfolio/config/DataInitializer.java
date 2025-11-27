@@ -1,9 +1,15 @@
 package com.example.portfolio.config;
 
+import com.example.portfolio.entity.Achievement;
 import com.example.portfolio.entity.Blog;
 import com.example.portfolio.entity.Project;
+import com.example.portfolio.entity.Skill;
+import com.example.portfolio.entity.User;
+import com.example.portfolio.repository.AchievementRepository;
 import com.example.portfolio.repository.BlogRepository;
 import com.example.portfolio.repository.ProjectRepository;
+import com.example.portfolio.repository.SkillRepository;
+import com.example.portfolio.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -15,11 +21,11 @@ import java.util.List;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
-    @Autowired
-    private ProjectRepository projectRepository;
-
-    @Autowired
-    private BlogRepository blogRepository;
+    @Autowired private ProjectRepository projectRepository;
+    @Autowired private BlogRepository blogRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private SkillRepository skillRepository;
+    @Autowired private AchievementRepository achievementRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -31,6 +37,10 @@ public class DataInitializer implements CommandLineRunner {
         // Initialize sample blogs if database is empty
         if (blogRepository.count() == 0) {
             initializeBlogs();
+        }
+
+        if (userRepository.count() == 0) {
+            initializeDefaultUser();
         }
     }
 
@@ -173,6 +183,46 @@ public class DataInitializer implements CommandLineRunner {
 
         blogRepository.saveAll(blogs);
     }
+
+    private void initializeDefaultUser() {
+        User user = new User();
+        user.setName("Demo User");
+        user.setEmail("demo@portfolio.dev");
+        user.setPasswordHash("$2a$10$Y2VkFDCJy8pwAvSCkrz0Q./oCPBnRgM4CHbYN59nYupXYuo84PWpK"); // password: demo123
+        User savedUser = userRepository.save(user);
+
+        List<Skill> skills = Arrays.asList(
+                createSkill(savedUser, "React", "Advanced"),
+                createSkill(savedUser, "Spring Boot", "Intermediate"),
+                createSkill(savedUser, "UI/UX Design", "Intermediate")
+        );
+        skillRepository.saveAll(skills);
+
+        List<Achievement> achievements = Arrays.asList(
+                createAchievement(savedUser, "Best UI Award", "Won regional UI Hackathon", LocalDate.of(2023, 11, 12)),
+                createAchievement(savedUser, "AWS Certified Developer", "Earned AWS certification", LocalDate.of(2024, 2, 2))
+        );
+        achievementRepository.saveAll(achievements);
+    }
+
+    private Skill createSkill(User user, String name, String level) {
+        Skill skill = new Skill();
+        skill.setName(name);
+        skill.setLevel(level);
+        skill.setUser(user);
+        return skill;
+    }
+
+    private Achievement createAchievement(User user, String title, String description, LocalDate date) {
+        Achievement achievement = new Achievement();
+        achievement.setTitle(title);
+        achievement.setDescription(description);
+        achievement.setAchievedOn(date);
+        achievement.setUser(user);
+        return achievement;
+    }
 }
+
+
 
 

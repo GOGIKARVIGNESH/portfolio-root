@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
+  const { user, logout } = useAuth()
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -30,6 +33,11 @@ export default function Header() {
     return location.pathname === path ? 'active' : ''
   }
 
+  const handleLogout = () => {
+    logout()
+    navigate('/auth')
+  }
+
   return (
     <header className="site-header">
       <div className="container">
@@ -51,6 +59,18 @@ export default function Header() {
           <Link to="/contact" className={isActive('/contact')}>
             Contact
           </Link>
+          <Link to="/dashboard" className={isActive('/dashboard')}>
+            Dashboard
+          </Link>
+          {user ? (
+            <button type="button" className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <Link to="/auth" className={isActive('/auth')}>
+              Login
+            </Link>
+          )}
         </nav>
 
         {/* Mobile Menu Toggle */}
@@ -76,6 +96,18 @@ export default function Header() {
           <Link to="/contact" className={isActive('/contact')}>
             Contact
           </Link>
+          <Link to="/dashboard" className={isActive('/dashboard')}>
+            Dashboard
+          </Link>
+          {user ? (
+            <button type="button" className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <Link to="/auth" className={isActive('/auth')}>
+              Login
+            </Link>
+          )}
         </nav>
       </div>
     </header>

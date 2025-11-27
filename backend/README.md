@@ -92,3 +92,5 @@ The backend is configured to work with the React frontend running on:
 Make sure the frontend is configured to use `http://localhost:8080/api` as the API base URL.
 
 
+
+

@@ -62,6 +62,8 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/portfolio-frontend:latest
+          # FIX: This forces a clean build, ensuring the 'chmod' fix in the Dockerfile is applied
+          no-cache: true 
 
   deploy:
     runs-on: ubuntu-latest

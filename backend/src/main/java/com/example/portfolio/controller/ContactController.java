@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/contacts")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class ContactController {
     
     @Autowired
@@ -62,5 +62,7 @@ public class ContactController {
                 .orElse(ResponseEntity.notFound().build());
     }
 }
+
+
 
 
